@@ -115,11 +115,16 @@ describe("readFileInRange", () => {
 });
 
 describe("dedup cache", () => {
-	it("stores and retrieves entries", () => {
+	it("stores and retrieves entries per session", () => {
 		cacheClear();
-		expect(cacheGet("/x")).toBeUndefined();
-		cacheSet("/x", { offset: 1, limit: undefined, timestamp: 100 });
-		expect(cacheGet("/x")?.timestamp).toBe(100);
+		expect(cacheGet("s1", "/x")).toBeUndefined();
+		cacheSet("s1", "/x", { offset: 1, limit: undefined, timestamp: 100 });
+		expect(cacheGet("s1", "/x")?.timestamp).toBe(100);
+	});
+	it("keeps sessions isolated", () => {
+		cacheClear();
+		cacheSet("s1", "/x", { offset: 1, limit: undefined, timestamp: 100 });
+		expect(cacheGet("s2", "/x")).toBeUndefined();
 	});
 });
 

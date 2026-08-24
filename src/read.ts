@@ -425,6 +425,7 @@ async function readNotebookFile(
   file_path: string,
   fullFilePath: string,
   resolvedFilePath: string,
+  session: string,
   offset: number,
   limit: number | undefined,
   maxSizeBytes: number,
@@ -448,7 +449,7 @@ async function readNotebookFile(
   await validateContentTokens(cellsJson, "ipynb", maxTokens);
 
   const mtimeMs = await getFileModificationTimeAsync(resolvedFilePath);
-  cacheSet(fullFilePath, {
+  cacheSet(session, fullFilePath, {
     offset,
     limit,
     timestamp: mtimeMs,
@@ -613,6 +614,7 @@ async function readTextFile(
   fullFilePath: string,
   resolvedFilePath: string,
   ext: string,
+  session: string,
   offset: number,
   limit: number | undefined,
   maxSizeBytes: number,
@@ -630,7 +632,7 @@ async function readTextFile(
 
   await validateContentTokens(content, ext, maxTokens);
 
-  cacheSet(fullFilePath, {
+  cacheSet(session, fullFilePath, {
     offset,
     limit,
     timestamp: Math.floor(mtimeMs),
@@ -653,6 +655,7 @@ async function readTextFile(
 export async function executeRead(
   input: ReadInput,
   cwd: string,
+  session: string,
   signal?: AbortSignal,
 ): Promise<ReadOutcome> {
   const maxSizeBytes = MAX_OUTPUT_SIZE;
@@ -667,7 +670,9 @@ export async function executeRead(
   const fullFilePath = expandPath(file_path, cwd);
 
   // Dedup: identical range, unchanged mtime → stub (text + notebook only).
-  const existingState = cacheGet(fullFilePath);
+  // Scoped to THIS session so a subagent's reads (which run in-process against
+  // this same module) can't make this session return a bogus "unchanged" stub.
+  const existingState = cacheGet(session, fullFilePath);
   if (existingState && existingState.offset === offset) {
     const rangeMatch = existingState.limit === limit;
     if (rangeMatch) {
@@ -688,6 +693,7 @@ export async function executeRead(
         file_path,
         fullFilePath,
         resolvedFilePath,
+        session,
         offset,
         limit,
         maxSizeBytes,
@@ -711,6 +717,7 @@ export async function executeRead(
       fullFilePath,
       resolvedFilePath,
       ext,
+      session,
       offset,
       limit,
       maxSizeBytes,

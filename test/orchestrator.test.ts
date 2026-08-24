@@ -7,6 +7,8 @@ import { executeRead, validateReadInput } from "../src/read.js";
 
 describe("executeRead (orchestrator)", () => {
 	let cwd: string;
+	const sessionA = "session-a";
+	const sessionB = "session-b";
 	beforeEach(async () => {
 		cacheClear();
 		cwd = await mkdtemp(join(tmpdir(), "picc-read-orch-"));
@@ -18,6 +20,7 @@ describe("executeRead (orchestrator)", () => {
 		const outcome = await executeRead(
 			{ file_path: file },
 			cwd,
+			sessionA,
 		);
 		expect(outcome.type).toBe("text");
 		if (outcome.type === "text") {
@@ -33,6 +36,7 @@ describe("executeRead (orchestrator)", () => {
 		const outcome = await executeRead(
 			{ file_path: file, offset: 2, limit: 2 },
 			cwd,
+			sessionA,
 		);
 		expect(outcome.type).toBe("text");
 		if (outcome.type === "text") {
@@ -40,18 +44,32 @@ describe("executeRead (orchestrator)", () => {
 		}
 	});
 
-	it("dedups an identical unchanged re-read", async () => {
+	it("dedups an identical unchanged re-read within the same session", async () => {
 		const file = join(cwd, "dedup.txt");
 		await writeFile(file, "stable content");
-		await executeRead({ file_path: file }, cwd);
-		const second = await executeRead({ file_path: file }, cwd);
+		await executeRead({ file_path: file }, cwd, sessionA);
+		const second = await executeRead({ file_path: file }, cwd, sessionA);
 		expect(second.type).toBe("file_unchanged");
+	});
+
+	it("does NOT dedup a re-read from a different session (e.g. a subagent)", async () => {
+		const file = join(cwd, "cross-session.txt");
+		await writeFile(file, "explored by a subagent");
+		// A subagent (different in-process session) reads the file first.
+		await executeRead({ file_path: file }, cwd, sessionB);
+		// The main session reading the same file must get full content, not
+		// the "unchanged" stub, since it never read the file itself.
+		const mainRead = await executeRead({ file_path: file }, cwd, sessionA);
+		expect(mainRead.type).toBe("text");
+		if (mainRead.type === "text") {
+			expect(mainRead.content).toBe("1\texplored by a subagent");
+		}
 	});
 
 	it("returns a friendly ENOENT message for missing files", async () => {
 		const file = join(cwd, "missing.txt");
 		await expect(
-			executeRead({ file_path: file }, cwd),
+			executeRead({ file_path: file }, cwd, sessionA),
 		).rejects.toThrow(/File does not exist/);
 	});
 

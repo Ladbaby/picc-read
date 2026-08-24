@@ -48,6 +48,10 @@ import type {
 	ExtensionContext,
 } from "@earendil-works/pi-coding-agent";
 import { Type } from "typebox";
+import {
+	cacheClearForSession,
+	DEFAULT_SESSION_KEY,
+} from "./src/dedup.js";
 import { formatFileSize } from "./src/format.js";
 import {
 	type ImageContent,
@@ -247,6 +251,15 @@ function buildDetails(outcome: ReadOutcome): ReadDetails {
 export default function (pi: ExtensionAPI): void {
 	const toolName = loadToolName();
 
+	// Free this session's read-dedup entries when it shuts down. Subagent
+	// sessions run in-process and would otherwise leak their cache entries into
+	// the shared module forever.
+	pi.on("session_shutdown", (_event, ctx) => {
+		cacheClearForSession(
+			ctx.sessionManager.getSessionId?.() ?? DEFAULT_SESSION_KEY,
+		);
+	});
+
 	pi.registerTool({
 		name: toolName,
 		label: toolName,
@@ -264,6 +277,11 @@ export default function (pi: ExtensionAPI): void {
 		) {
 			const input = params as ReadInput;
 			const cwd = ctx.cwd;
+			// Scope read-dedup to this session so in-process subagents (which
+			// share the picc-read module) can't make this session return a
+			// "File unchanged since last read" stub for files it never read.
+			const session =
+				ctx.sessionManager.getSessionId?.() ?? DEFAULT_SESSION_KEY;
 
 			const validation = validateReadInput(input, cwd);
 			if (!validation.ok) {
@@ -275,7 +293,7 @@ export default function (pi: ExtensionAPI): void {
 			}
 
 			try {
-				const outcome = await executeRead(input, cwd, signal);
+				const outcome = await executeRead(input, cwd, session, signal);
 
 				let content: ResultContent[];
 				if (outcome.type === "notebook") {
