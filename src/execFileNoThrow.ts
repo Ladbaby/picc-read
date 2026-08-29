@@ -21,7 +21,6 @@ type ExecFileOptions = {
 
 /**
  * Run a command, never throwing. Returns exit code + captured stdout/stderr.
- * Mirrors claude-code `execFileNoThrow`'s return shape.
  */
 export async function execFileNoThrow(
   file: string,
