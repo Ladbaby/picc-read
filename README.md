@@ -1,6 +1,8 @@
 # picc-read
 
-Claude Code-style **Read** tool for [pi](https://pi.dev) — a faithful port of Claude Code's `Read` tool, overriding pi's built-in `read`.
+[![npm downloads](https://img.shields.io/npm/dt/@ladbabynpm/picc-read.svg)](https://www.npmjs.com/package/@ladbabynpm/picc-read)
+
+Claude Code style **Read** tool for [pi](https://pi.dev) — a faithful port of Claude Code's `Read` tool, overriding pi's built-in `read`.
 
 Part of [picc](https://github.com/Ladbaby/picc), a pi agent setup mirroring Claude Code's harness.
 
@@ -62,9 +64,3 @@ npm run lint        # biome check
 npm run typecheck   # tsc --noEmit
 npm run test        # vitest run
 ```
-
-## References
-
-- Claude Code Read tool: `tools/FileReadTool/FileReadTool.ts` (+ `prompt.ts`, `limits.ts`, `UI.tsx`)
-- Claude Code readers: `utils/readFileInRange.ts`, `utils/file.ts`, `utils/imageResizer.ts`,
-  `utils/notebook.ts`, `utils/pdf.ts`, `utils/pdfUtils.ts`, `utils/path.ts`
