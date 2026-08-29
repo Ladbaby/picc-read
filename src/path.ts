@@ -1,8 +1,6 @@
 // =============================================================================
 // picc-read — src/path.ts
 //
-// Port of claude-code's `utils/path.ts:expandPath`.
-//
 // Adaptors vs upstream:
 //   - `getCwd()` / `getFsImplementation().cwd()` → `process.cwd()`
 //   - `getPlatform()` → `process.platform`

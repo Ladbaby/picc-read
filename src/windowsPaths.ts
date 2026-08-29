@@ -1,9 +1,6 @@
 // =============================================================================
 // picc-read — src/windowsPaths.ts
 //
-// Faithful port of the claude-code replication's `utils/windowsPaths.ts`
-// `posixPathToWindowsPath` (the pure-JS variant, memoization dropped).
-//
 // On Windows, Git Bash (MSYS2) passes POSIX-style paths like `/c/Users/...`.
 // This module converts that to a real Windows path so file APIs work.
 // =============================================================================

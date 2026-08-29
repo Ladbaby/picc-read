@@ -1,8 +1,6 @@
 // =============================================================================
 // picc-read — src/pdfUtils.ts
 //
-// Port of claude-code's `utils/pdfUtils.ts`.
-//
 // Adaptors:
 //   - `isPDFSupported()` is hardcoded `true` (claude-code checks the active
 //     model; pi's Read tool should offer PDF everywhere and fall back to

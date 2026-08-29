@@ -1,9 +1,3 @@
-// =============================================================================
-// picc-read — src/format.ts
-//
-// Port of claude-code's `utils/format.ts:formatFileSize`.
-// =============================================================================
-
 /** Format a byte count as a human-readable size. */
 export function formatFileSize(sizeInBytes: number): string {
   const kb = sizeInBytes / 1024;

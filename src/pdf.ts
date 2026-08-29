@@ -1,8 +1,6 @@
 // =============================================================================
 // picc-read — src/pdf.ts
 //
-// Port of claude-code's `utils/pdf.ts`.
-//
 // Adaptors:
 //   - `getFsImplementation()` → `node:fs/promises`.
 //   - `getToolResultsDir()` → `os.tmpdir()/pi-pdf-extracts` (adaptor shim).

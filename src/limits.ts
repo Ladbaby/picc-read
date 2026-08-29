@@ -1,8 +1,6 @@
 // =============================================================================
 // picc-read — src/limits.ts
 //
-// Port of claude-code's `tools/FileReadTool/limits.ts`.
-//
 // The env-var override uses `PICC_READ_MAX_OUTPUT_TOKENS` (in place of
 // claude-code's `CLAUDE_CODE_FILE_READ_MAX_OUTPUT_TOKENS`) and a simplified
 // context-window check (in place of GrowthBook feature flags).

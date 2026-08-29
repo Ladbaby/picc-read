@@ -1,8 +1,6 @@
 // =============================================================================
 // picc-read — src/notebook.ts
 //
-// Port of claude-code's `utils/notebook.ts`.
-//
 // Adaptors:
 //   - `getFsImplementation().readFileBytes` → `node:fs/promises.readFile`.
 //   - `expandPath` → local `src/path.ts`.

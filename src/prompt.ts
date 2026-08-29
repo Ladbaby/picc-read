@@ -1,9 +1,6 @@
 // =============================================================================
 // picc-read — src/prompt.ts
 //
-// Port of claude-code's `tools/FileReadTool/prompt.ts` (DESCRIPTION, the
-// rendered prompt, and the read-dedup stub).
-//
 // Adaptors:
 //   - `BASH_TOOL_NAME` → `"bash"`.
 //   - `isPDFSupported()` is always true, so the PDF line is always included.

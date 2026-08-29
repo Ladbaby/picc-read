@@ -1,12 +1,6 @@
 // =============================================================================
 // picc-read — src/file.ts
 //
-// Faithful port of the claude-code replication's:
-//   - `utils/readFileInRange.ts` (line-oriented reader, fast + streaming)
-//   - `utils/file.ts:addLineNumbers` / `FILE_NOT_FOUND_CWD_NOTE` /
-//     `getFileModificationTimeAsync`
-//   - `utils/windowsPaths.ts:expandPath`
-//
 // Adaptors vs upstream:
 //   - fs access uses plain `node:fs` / `node:fs/promises` directly (in place
 //     of claude-code's `getFsImplementation()`).

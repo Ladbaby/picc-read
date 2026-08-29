@@ -1,8 +1,6 @@
 // =============================================================================
 // picc-read — src/imageProcessor.ts
 //
-// Adaptor for claude-code's `tools/FileReadTool/imageProcessor.ts`.
-//
 // Upstream lazily `import('sharp')` / `import('image-processor-napi')`. Per
 // project rules picc-read uses a top-level `sharp` import and memoizes the
 // function; `getImageProcessor()` simply returns it.

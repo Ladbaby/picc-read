@@ -1,8 +1,6 @@
 // =============================================================================
 // picc-read — src/imageResizer.ts
 //
-// Faithful port of claude-code's `utils/imageResizer.ts`.
-//
 // Adaptors vs upstream:
 //   - `getImageProcessor()` is sync (sharp imported at top level), so no `await`.
 //   - Analytics (`logEvent`, `logError`) and `errorMessage` are no-op / trivial.

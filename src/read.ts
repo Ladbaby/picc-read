@@ -1,11 +1,6 @@
 // =============================================================================
 // picc-read — src/read.ts
 //
-// The core orchestrator: a faithful port of claude-code's
-// `tools/FileReadTool/FileReadTool.ts` (`call` + `callInner` + `readImageWithTokenBudget`),
-// adapted so results are returned as pi `AgentToolResult`-friendly discriminated
-// unions instead of Anthropic `tool_result` blocks.
-//
 // Adaptors vs upstream:
 //   - `context.readFileState` dedup → module-level `src/dedup.ts` cache.
 //   - `getDefaultFileReadingLimits()` → `MAX_OUTPUT_SIZE` / `getEffectiveMaxTokens()`.

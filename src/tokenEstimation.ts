@@ -1,11 +1,6 @@
 // =============================================================================
 // picc-read — src/tokenEstimation.ts
 //
-// Port of claude-code's `services/tokenEstimation.ts` rough-estimation helpers
-// (`roughTokenCountEstimation`, `bytesPerTokenForFileType`,
-// `roughTokenCountEstimationForFileType`) and the read tool's
-// `validateContentTokens` cap check.
-//
 // Adaptor: claude-code uses `countTokensWithAPI` (a model call) as a second
 // stage when the rough estimate is high. pi has no token-counting endpoint, so
 // the rough estimate alone enforces the cap (as agreed in the plan).
